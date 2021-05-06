@@ -10,23 +10,22 @@ import photos from "./gallery-items.js";
 // Это необходимо для того, чтобы при следующем открытии модального окна,
 // пока грузится изображение, мы не видели предыдущее.
 
-const refs = {
-  galleryItem: document.querySelector(".gallery__item"),
-  jsGal: document.querySelector(".js-gallery"),
+const galleryItemRef = document.querySelector(".gallery__item");
+const jsGalRef = document.querySelector(".js-gallery");
 
-  element: document.querySelector(".gallery__image"),
+const elementRef = document.querySelector(".gallery__image");
 
-  lightbox: document.querySelector(".lightbox"),
-  content: document.querySelector(".lightbox__image"),
-  button: document.querySelector(".lightbox__button"),
+const lightboxRef = document.querySelector(".lightbox");
+const imageRef = document.querySelector(".lightbox__image");
+const buttonRef = document.querySelector(".lightbox__button");
 
-  jsLight: document.querySelector(".js-lightbox"),
-  overlay: document.querySelector(".lightbox__overlay"),
-  content: document.querySelector(".lightbox__content"),
+const jsLightRef = document.querySelector(".js-lightbox");
+const overlayRef = document.querySelector(".lightbox__overlay");
+const contentRef = document.querySelector(".lightbox__content");
 
-  close: document.querySelector('[data-action="close-lightbox"]'),
-};
+const closeRef = document.querySelector('[data-action="close-lightbox"]');
 
+let currentEvtLi;
 // 1. Создание и рендер разметки по массиву данных и предоставленному шаблону.
 const createGalleryMarkup = ({ preview, original, description }) => {
   return `<li class="gallery__item">
@@ -47,39 +46,33 @@ const createGalleryMarkup = ({ preview, original, description }) => {
 
 const createGallery = photos.map((img) => createGalleryMarkup(img)).join("");
 
-refs.jsGal.innerHTML = createGallery;
+jsGalRef.innerHTML = createGallery;
 
 // 2. Реализация делегирования на галерее ul.js-gallery
 // и получение url большого изображения.
 
-refs.jsGal.addEventListener("click", clickOnPicture);
-// refs.button.addEventListener("click", closeModal);
-refs.lightbox.addEventListener("click", openModal);
-
-// element
+jsGalRef.addEventListener("click", clickOnPicture);
+buttonRef.addEventListener("click", closeModal);
 
 function clickOnPicture(evt) {
   evt.preventDefault();
 
-  if (!evt.target.classList.contains(".gallery__image")) {
+  if (!evt.target.classList.contains("gallery__image")) {
     console.log("NOT click");
     return;
   }
 
-  // console.log("OK");
-  // openModal(evt);
-  // openModal(evt);
+  currentEvtLi = evt.target.parentNode; //обращаемся к родителю елемента на к тором произошло событие - это li
+
+  lightboxRef.classList.add("is-open");
+  imageRef.src = evt.target.dataset.source;
+  imageRef.alt = evt.target.alt;
 }
 
-function openModal(evt) {
-  refs.lightbox.classList.add(".is-open");
-  refs.content.src = evt.target.refs.galleryItem.data.sourse;
+function closeModal() {
+  lightboxRef.classList.remove("is-open");
 }
 
-// function closeModal() {
-//   refs.lightbox.classList.remove(".is-open");
-// }
-
-// refs.lightbox.classList.add(".is-open");
+// lightboxRef.classList.add(".is-open");
 
 //
