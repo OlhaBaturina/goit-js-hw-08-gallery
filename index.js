@@ -40,6 +40,7 @@ jsGalRef.innerHTML = createGallery;
 
 jsGalRef.addEventListener("click", clickOnPicture);
 buttonRef.addEventListener("click", closeModal);
+overlayRef.addEventListener("click", closeModalOnOverley);
 
 function clickOnPicture(evt) {
   evt.preventDefault();
@@ -60,4 +61,10 @@ function closeModal() {
   lightboxRef.classList.remove("is-open");
   imageRef.src = "";
   imageRef.alt = "";
+}
+
+function closeModalOnOverley(evt) {
+  if (evt.target === evt.currentTarget) {
+    closeModal();
+  }
 }
