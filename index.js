@@ -41,6 +41,7 @@ jsGalRef.innerHTML = createGallery;
 jsGalRef.addEventListener("click", clickOnPicture);
 buttonRef.addEventListener("click", closeModal);
 overlayRef.addEventListener("click", closeModalOnOverley);
+window.addEventListener("keydown", clickOnEscKey);
 
 function clickOnPicture(evt) {
   evt.preventDefault();
@@ -65,6 +66,12 @@ function closeModal() {
 
 function closeModalOnOverley(evt) {
   if (evt.target === evt.currentTarget) {
+    closeModal();
+  }
+}
+
+function clickOnEscKey(evt) {
+  if (evt.code === "Escape") {
     closeModal();
   }
 }
