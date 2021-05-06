@@ -1,14 +1,4 @@
 import photos from "./gallery-items.js";
-// console.log(photos[1]);
-
-//
-// 3. Открытие модального окна по клику на элементе галереи.
-// 4. Подмена значения атрибута src элемента img.lightbox__image.
-// 5. Закрытие модального окна по клику на кнопку
-// button[data-action="close-lightbox"].
-// 6. Очистка значения атрибута src элемента img.lightbox__image.
-// Это необходимо для того, чтобы при следующем открытии модального окна,
-// пока грузится изображение, мы не видели предыдущее.
 
 const galleryItemRef = document.querySelector(".gallery__item");
 const jsGalRef = document.querySelector(".js-gallery");
@@ -26,7 +16,7 @@ const contentRef = document.querySelector(".lightbox__content");
 const closeRef = document.querySelector('[data-action="close-lightbox"]');
 
 let currentEvtLi;
-// 1. Создание и рендер разметки по массиву данных и предоставленному шаблону.
+
 const createGalleryMarkup = ({ preview, original, description }) => {
   return `<li class="gallery__item">
   <a
@@ -48,9 +38,6 @@ const createGallery = photos.map((img) => createGalleryMarkup(img)).join("");
 
 jsGalRef.innerHTML = createGallery;
 
-// 2. Реализация делегирования на галерее ul.js-gallery
-// и получение url большого изображения.
-
 jsGalRef.addEventListener("click", clickOnPicture);
 buttonRef.addEventListener("click", closeModal);
 
@@ -62,7 +49,7 @@ function clickOnPicture(evt) {
     return;
   }
 
-  currentEvtLi = evt.target.parentNode; //обращаемся к родителю елемента на к тором произошло событие - это li
+  currentEvtLi = evt.target.parentNode;
 
   lightboxRef.classList.add("is-open");
   imageRef.src = evt.target.dataset.source;
@@ -71,8 +58,6 @@ function clickOnPicture(evt) {
 
 function closeModal() {
   lightboxRef.classList.remove("is-open");
+  imageRef.src = "";
+  imageRef.alt = "";
 }
-
-// lightboxRef.classList.add(".is-open");
-
-//
