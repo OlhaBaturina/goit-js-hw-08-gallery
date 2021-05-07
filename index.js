@@ -9,9 +9,12 @@ const overlayRef = document.querySelector(".lightbox__overlay");
 
 // Текущая картинка
 let currentElement;
+let indexOfCurentElement = 0;
 
+// array.map(({ preview, original, description }, index) =>
+//  {...} (добавляю в img ещё data-index=${index})
 // Создание HTML разметки для каждого элемента
-const createGalleryMarkup = ({ preview, original, description }) => {
+const createGalleryMarkup = ({ preview, original, description }, index) => {
   return `<li class="gallery__item">
   <a
     class="gallery__link"
@@ -21,6 +24,7 @@ const createGalleryMarkup = ({ preview, original, description }) => {
       class="gallery__image"
       src="${preview}"
       data-source="${original}"
+      data-index=${index}
       alt="${description}" 
       />
   </a>
@@ -47,12 +51,16 @@ function clickOnPicture(evt) {
     return; // Делегируем событие клика с контейнера на картинку
   }
 
-  currentElement = evt.target.parentNode; //задаем переменной значение "текущей картинки" значени родителя елемента
+  currentElement = evt.target.closest(".gallery__item"); //задаем переменной значение "текущей картинки" значени родителя елемента
+  console.log(currentElement);
 
   lightboxRef.classList.add("is-open"); //Вешаем класс открытия модалки
 
   imageRef.src = evt.target.dataset.source; // Добавляем значения атрибутов на картинки
   imageRef.alt = evt.target.alt;
+
+  indexOfCurentElement = Number(evt.target.dataset.index);
+  console.log(evt.target.dataIndex);
 
   window.addEventListener("keydown", clickOnEscKey); // Вешаем слушатели при открытии модалки на кнопки Esc и Arrow
   window.addEventListener("keydown", clickOnArrowKey);
@@ -86,23 +94,12 @@ function clickOnEscKey(evt) {
 // Функция перелистывания с помощью кнопок "ArrowRight" и "ArrowLeft"
 function clickOnArrowKey(evt) {
   if (evt.code === "ArrowRight") {
-    let leftBtn = currentElement.nextElementSibling; //присваиваем следующий элемент(li)
-
-    if (!leftBtn) {
-      leftBtn = jsGalRef.firstElementChild; //если следующего элемента нет - подставляем первый
-    }
-
-    imageRef.src = leftBtn.lastElementChild.dataset.source; //присваиваем текущему значению картинку
-    currentElement = leftBtn;
+    indexOfCurentElement += 1;
+    console.log(indexOfCurentElement);
   }
+
   if (evt.code === "ArrowLeft") {
-    let rightBtn = currentElement.previousElementSibling;
-
-    if (!rightBtn) {
-      rightBtn = jsGalRef.lastElementChild;
-    }
-
-    imageRef.src = rightBtn.lastElementChild.dataset.source;
-    currentElement = rightBtn;
+    indexOfCurentElement -= 1;
+    console.log(indexOfCurentElement);
   }
 }
