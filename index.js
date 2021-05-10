@@ -9,7 +9,7 @@ const overlayRef = document.querySelector(".lightbox__overlay");
 
 // Текущая картинка
 let currentElement;
-let indexOfCurentElement = 0;
+let indexOfCurentElement;
 
 // array.map(({ preview, original, description }, index) =>
 //  {...} (добавляю в img ещё data-index=${index})
@@ -24,7 +24,7 @@ const createGalleryMarkup = ({ preview, original, description }, index) => {
       class="gallery__image"
       src="${preview}"
       data-source="${original}"
-      data-index=${index}
+      data-index="${index}"
       alt="${description}" 
       />
   </a>
@@ -33,7 +33,13 @@ const createGalleryMarkup = ({ preview, original, description }, index) => {
 };
 
 // Перебираем массив разметки по элементам, превращаем в строку
-const createGallery = photos.map((img) => createGalleryMarkup(img)).join("");
+const arrayOfGalery = photos.map((img, index) =>
+  createGalleryMarkup(img, index)
+);
+
+console.log(arrayOfGalery);
+
+const createGallery = arrayOfGalery.join("");
 
 // Отправляем разметку в DOM
 jsGalRef.innerHTML = createGallery;
@@ -50,17 +56,22 @@ function clickOnPicture(evt) {
   if (!evt.target.classList.contains("gallery__image")) {
     return; // Делегируем событие клика с контейнера на картинку
   }
+  indexOfCurentElement = evt.target.dataset.index;
+  console.log(indexOfCurentElement);
 
   currentElement = evt.target.closest(".gallery__item"); //задаем переменной значение "текущей картинки" значени родителя елемента
-  console.log(currentElement);
 
   lightboxRef.classList.add("is-open"); //Вешаем класс открытия модалки
 
   imageRef.src = evt.target.dataset.source; // Добавляем значения атрибутов на картинки
+  // console.log(imageRef.src);
+
   imageRef.alt = evt.target.alt;
 
-  indexOfCurentElement = Number(evt.target.dataset.index);
-  console.log(evt.target.dataIndex);
+  console.log(evt.target);
+
+  const currentIndex = arrayOfGalery.indexOf(evt.target);
+  console.log(currentIndex);
 
   window.addEventListener("keydown", clickOnEscKey); // Вешаем слушатели при открытии модалки на кнопки Esc и Arrow
   window.addEventListener("keydown", clickOnArrowKey);
@@ -94,12 +105,11 @@ function clickOnEscKey(evt) {
 // Функция перелистывания с помощью кнопок "ArrowRight" и "ArrowLeft"
 function clickOnArrowKey(evt) {
   if (evt.code === "ArrowRight") {
-    indexOfCurentElement += 1;
-    console.log(indexOfCurentElement);
+    console.log(arrayOfGalery[indexOfCurentElement]);
+    return (indexOfCurentElement += 1);
   }
 
   if (evt.code === "ArrowLeft") {
-    indexOfCurentElement -= 1;
-    console.log(indexOfCurentElement);
+    console.log((currentElement -= 1));
   }
 }
